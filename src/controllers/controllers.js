@@ -110,40 +110,28 @@ const transaction = {
     addFromExcel: (req, res) => {
         try {
             if (req.file == undefined) {
-                return res.status(400).json({ message: 'Please upload your file' });
+                return res.status(400).json({ message: 'File not found' });
             }
 
             let path = 'src/uploads/' + req.file.filename;
 
             readFile(path).then((rows) => {
                 rows.shift();
-                
-                let datas = [];
-                
-                rows.forEach((row) => {
-                    let data = {
-                        id: row[0],
-                        nama: row[1],
-                        alamat: row[2]
-                    };
-                    
-                    datas.push(data);
-                });
 
                 mhsModel.addExcel(rows)
                 .then(() => {
                     res.json({
                         status: 'success',
-                        message: 'Upload file successfully'
+                        message: 'Upload success'
                     });
                 })
                 .catch((err) => {
-                    return res.status(500).json({ message: 'fail import to database', error: err.message });
+                    return res.status(500).json({ message: 'import fail', error: err.message });
                 })
             })
         } catch (error) {
             console.log(error)
-            return res.status(500).json({ message: 'could not upload file' });
+            return res.status(500).json({ message: 'cannot upload file' });
         }
     }
 }

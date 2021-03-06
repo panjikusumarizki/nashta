@@ -88,9 +88,6 @@ const transaction = {
     },
 
     addExcel: (data) => {
-        // let query = 'INSERT INTO mahasiswa (id, nama, alamat) VALUES ?';
-
-        // db.query(query, [data], (err, result) => console.log(err || result));
         return new Promise((resolve, reject) => {
             db.query('INSERT INTO mahasiswa (id, nama, alamat) VALUES ?', [data], (err, result) => {
                 if (err) {
@@ -102,17 +99,17 @@ const transaction = {
         });
     },
 
-    updateExcel: (data, id) => {
-        return new Promise((resolve, reject) => {
-            db.query(`UPDATE mahasiswa SET ? WHERE id = ?`, [data, id], (err, result) => {
-                if (err) {
-                    reject(new Error(err));
-                } else {
-                    resolve(result);
-                }
-            });
-        });
-    }
+    // updateExcel: (data, id) => {
+    //     return new Promise((resolve, reject) => {
+    //         db.query(`UPDATE mahasiswa SET ? WHERE id = ?`, [data, id], (err, result) => {
+    //             if (err) {
+    //                 reject(new Error(err));
+    //             } else {
+    //                 resolve(result);
+    //             }
+    //         });
+    //     });
+    // }
 };
 
 module.exports = transaction;

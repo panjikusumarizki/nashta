@@ -8,16 +8,16 @@ const transaction = {
             
             mhsModel.addDataNilai(body)
             .then((result) => {
-                return res.json({
+                return res.status(200).json({
                     status: 'success',
                     data: body
                 })
             })
             .catch((err) => {
-                return res.status(404).json({ message: err.message});
+                return res.status(500).json({ message: err.message});
             })
         } catch (error) {
-            return res.status(404).json({ message: error.message });
+            return res.status(500).json({ message: error.message });
         }
     },
 
@@ -26,25 +26,24 @@ const transaction = {
             const id = req.params.id;
             const body = req.body;
 
-            if (!id) {
-                return res.status(404).json({
-                    status: 'error',
-                    message: 'id not found'
-                });
-            } else {
-                mhsModel.updateDataNilai(body, id)
+            mhsModel.updateDataNilai(body, id)
                 .then((result) => {
-                    return res.json({
+                    if (result.affectedRows === 0) {
+                        return res.status(404).json({ 
+                            status: 'error',
+                            message: 'Id not found'
+                        });
+                    }
+                    res.status(200).json({
                         status: 'update success',
                         data: body
                     });
                 })
                 .catch((err) => {
-                    return res.status(404).json({ message: err.message });
+                    res.status(500).json({ message: err.message });
                 })
-            }
         } catch (error) {
-            return res.status(404).json({ message: error.message });
+            return res.status(500).json({ message: error.message });
         }
     },
 
@@ -60,16 +59,16 @@ const transaction = {
                         message: 'Id not found'
                     });
                 }
-                return res.json({
+                return res.status(200).json({
                     status: 'success',
                     message: 'delete data success'
                 });
             })
             .catch((err) => {
-                return res.status(404).json({ message: err.message });
+                return res.status(500).json({ message: err.message });
             })
         } catch (error) {
-            return res.status(404).json({ message: error.message });
+            return res.status(500).json({ message: error.message });
         }
     },
 
@@ -77,16 +76,16 @@ const transaction = {
         try {
             mhsModel.getAll()
             .then((result) => {
-                return res.json({
+                return res.status(200).json({
                     status: 'success',
                     data: result
                 });
             })
             .catch((err) => {
-                return res.status(404).json({ message: err.message });
+                return res.status(500).json({ message: err.message });
             })
         } catch (error) {
-            return res.status(404).json({ message: error.message });
+            return res.status(500).json({ message: error.message });
         }
     },
 
@@ -94,23 +93,23 @@ const transaction = {
         try {
             mhsModel.getAverage()
             .then((result) => {
-                return res.json({
+                return res.status(200).json({
                     status: 'success',
                     data: result
                 });
             })
             .catch((err) => {
-                return res.status(404).json({ message: err.message });
+                return res.status(500).json({ message: err.message });
             })
         } catch (error) {
-            return res.status(404).json({ message: error.message });
+            return res.status(500).json({ message: error.message });
         }
     },
 
     addFromExcel: (req, res) => {
         try {
             if (req.file == undefined) {
-                return res.status(400).json({ message: 'File not found' });
+                return res.status(404).json({ message: 'File not found' });
             }
 
             let path = 'src/uploads/' + req.file.filename;
@@ -120,7 +119,7 @@ const transaction = {
 
                 mhsModel.addExcel(rows)
                 .then(() => {
-                    res.json({
+                    res.status(200).json({
                         status: 'success',
                         message: 'Upload success'
                     });
